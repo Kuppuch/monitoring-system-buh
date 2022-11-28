@@ -2,18 +2,19 @@ package com.kuppuch.web;
 
 import com.google.gson.Gson;
 import com.kuppuch.model.Project;
-import com.kuppuch.model.Work;
-import com.kuppuch.repository.WorkRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.kuppuch.model.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.Map;
 
 @Controller
 public class ProjectController {
@@ -41,7 +42,7 @@ public class ProjectController {
                 System.out.println("failed: " + con.getResponseCode() + " error " + con.getResponseMessage());
             }
 
-        } catch (IOException e){
+        } catch (IOException e) {
             System.out.println(e);
         } finally {
             if (con != null) {
@@ -51,7 +52,50 @@ public class ProjectController {
         Project[] projects = gson.fromJson(sb.toString(), Project[].class);
         modelMap.addAttribute("projects", projects);
 
-        return "projects";
+        return "project/projects";
+    }
+
+    @GetMapping("/projects/add")
+    public String getProjectAddPage(ModelMap modelMap) {
+        String address = "http://localhost:25595/api/user/";
+        HttpURLConnection con = null;
+        StringBuilder sb = new StringBuilder();
+        Gson gson = new Gson();
+
+        try {
+            con = (HttpURLConnection) new URL(address).openConnection();
+            con.setRequestMethod("GET");
+            con.connect();
+            System.out.println();
+            if (HttpURLConnection.HTTP_OK == con.getResponseCode()) {
+                BufferedReader br = new BufferedReader(new InputStreamReader(con.getInputStream()));
+
+                String line;
+                while ((line = br.readLine()) != null) {
+                    sb.append(line);
+                    sb.append("\n");
+                }
+            } else {
+                System.out.println("failed: " + con.getResponseCode() + " error " + con.getResponseMessage());
+            }
+
+        } catch (IOException e) {
+            System.out.println(e);
+        } finally {
+            if (con != null) {
+                con.disconnect();
+            }
+        }
+        User[] users = gson.fromJson(sb.toString(), User[].class);
+        modelMap.addAttribute("users", users);
+        return "project/addproject";
+    }
+
+    @PostMapping("/projects/add")
+    public String createProject(@RequestParam String name, @RequestParam String description, @RequestParam String manager, @RequestParam boolean pub, Map<String, Object> model) {
+        Project project = new Project(name, description, Integer.parseInt(manager), 1, pub);
+
+        return "work/addwork";
     }
 
 

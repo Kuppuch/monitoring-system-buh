@@ -27,7 +27,7 @@ public class WorkController {
     }
 
     @GetMapping("/works/add")
-    public String greeting() {
+    public String getWorkAddPage() {
         return "work/addwork";
     }
 

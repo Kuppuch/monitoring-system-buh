@@ -6,8 +6,9 @@
 </head>
 <body>
 <div th:replace="header :: header"/>
-<ul th:each="employee:${projects}">
-    <li th:text="${employee.name} + ' ' + ${employee.issuesCnt}"></li>
+<a href="/projects/add">Создать проект</a>
+<ul th:each="project:${projects}">
+    <li th:text="${project.name} + ' ' + ${project.issuesCnt}"></li>
 </ul>
 </body>
 </html>

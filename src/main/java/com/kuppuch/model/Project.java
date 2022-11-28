@@ -13,6 +13,17 @@ public class Project {
     private int status;
     @SerializedName(value = "IssuesCnt")
     private int issuesCnt;
+    private int manager;
+
+    public Project() {}
+
+    public Project(String name, String description, int manager, int status, boolean isPublic) {
+        this.name = name;
+        this.description = description;
+        this.manager = manager;
+        this.status = status;
+        this.isPublic = isPublic;
+    }
 
     public int getId() {
         return id;
@@ -60,5 +71,13 @@ public class Project {
 
     public void setIssuesCnt(int issuesCnt) {
         this.issuesCnt = issuesCnt;
+    }
+
+    public int getManager() {
+        return manager;
+    }
+
+    public void setManager(int manager) {
+        this.manager = manager;
     }
 }

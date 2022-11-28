@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Добавление проекта</title>
+</head>
+<body>
+<div th:replace="header :: header"/>
+<div>
+    <form method="post">
+        <input type="text" name="name" placeholder="Введите название проекта">
+        <input type="text" name="description" placeholder="Введите описание проекта">
+        <select class="form-control" id="dropDownList" name="manager">
+            <option value="0">Выберите менеджера</option>
+            <option th:each="user : ${users}" th:value="${user.getId()}"
+                    th:text="${user.getName()} + ' ' + ${user.getLastname()}"></option>
+        </select>
+        <input type="checkbox" name="pub">Публичный</input>
+        <button type="submit">Добавить</button>
+    </form>
+</div>
+</body>
+</html>
