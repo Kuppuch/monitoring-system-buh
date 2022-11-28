@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Список работ</title>
+</head>
+<body>
+<div th:replace="header :: header"/>
+<a href="/works/add">Добавить работу</a>
+<table>
+    <thead>
+    <tr>
+        <th> Title</th>
+        <th> Author</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:if="${works.empty}">
+        <td colspan="2"> No Books Available</td>
+    </tr>
+    <tr th:each="work : ${works}">
+        <td><span th:text="${work.id}"> Title </span></td>
+        <td><span th:text="${work.name}"> Title </span></td>
+        <td><span th:text="${work.coast}"> Author </span></td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>

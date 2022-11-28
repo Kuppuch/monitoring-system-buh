@@ -2,6 +2,9 @@ package com.kuppuch.web;
 
 import com.google.gson.Gson;
 import com.kuppuch.model.Project;
+import com.kuppuch.model.Work;
+import com.kuppuch.repository.WorkRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -50,5 +53,6 @@ public class ProjectController {
 
         return "projects";
     }
+
 
 }

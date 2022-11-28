@@ -5,6 +5,7 @@
     <title>Проекты</title>
 </head>
 <body>
+<div th:replace="header :: header"/>
 <ul th:each="employee:${projects}">
     <li th:text="${employee.name} + ' ' + ${employee.issuesCnt}"></li>
 </ul>
