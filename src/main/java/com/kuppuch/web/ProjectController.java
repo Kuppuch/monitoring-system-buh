@@ -3,6 +3,7 @@ package com.kuppuch.web;
 import com.google.gson.Gson;
 import com.kuppuch.model.Project;
 import com.kuppuch.model.User;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,9 +19,12 @@ import java.util.Map;
 
 @Controller
 public class ProjectController {
+
+    @Value("${baseurl}")
+    String baseurl;
     @GetMapping("/projects")
     public String projects(ModelMap modelMap) {
-        String address = "http://localhost:25595/api/project/";
+        String address = baseurl+"/project/";
         HttpURLConnection con = null;
         StringBuilder sb = new StringBuilder();
         Gson gson = new Gson();
@@ -29,7 +33,6 @@ public class ProjectController {
             con = (HttpURLConnection) new URL(address).openConnection();
             con.setRequestMethod("GET");
             con.connect();
-            System.out.println();
             if (HttpURLConnection.HTTP_OK == con.getResponseCode()) {
                 BufferedReader br = new BufferedReader(new InputStreamReader(con.getInputStream()));
 
@@ -57,6 +60,21 @@ public class ProjectController {
 
     @GetMapping("/projects/add")
     public String getProjectAddPage(ModelMap modelMap) {
+
+        User[] users = getApiUser();
+        modelMap.addAttribute("users", users);
+        return "project/addproject";
+    }
+
+    @PostMapping("/projects/add")
+    public String createProject(@RequestParam String name, @RequestParam String description, @RequestParam String manager, @RequestParam boolean pub, ModelMap modelMap) {
+        Project project = new Project(name, description, Integer.parseInt(manager), 1, pub);
+        User[] users = getApiUser();
+        modelMap.addAttribute("users", users);
+        return "project/addproject";
+    }
+
+    public User[] getApiUser() {
         String address = "http://localhost:25595/api/user/";
         HttpURLConnection con = null;
         StringBuilder sb = new StringBuilder();
@@ -66,7 +84,6 @@ public class ProjectController {
             con = (HttpURLConnection) new URL(address).openConnection();
             con.setRequestMethod("GET");
             con.connect();
-            System.out.println();
             if (HttpURLConnection.HTTP_OK == con.getResponseCode()) {
                 BufferedReader br = new BufferedReader(new InputStreamReader(con.getInputStream()));
 
@@ -86,16 +103,7 @@ public class ProjectController {
                 con.disconnect();
             }
         }
-        User[] users = gson.fromJson(sb.toString(), User[].class);
-        modelMap.addAttribute("users", users);
-        return "project/addproject";
-    }
-
-    @PostMapping("/projects/add")
-    public String createProject(@RequestParam String name, @RequestParam String description, @RequestParam String manager, @RequestParam boolean pub, Map<String, Object> model) {
-        Project project = new Project(name, description, Integer.parseInt(manager), 1, pub);
-
-        return "work/addwork";
+        return gson.fromJson(sb.toString(), User[].class);
     }
 
 
