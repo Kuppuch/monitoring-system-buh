@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -23,15 +25,23 @@ public class ProjectController {
     @Value("${baseurl}")
     String baseurl;
     @GetMapping("/projects")
-    public String projects(ModelMap modelMap) {
-        String address = baseurl+"/project/";
+    public String projects(ModelMap modelMap, HttpServletRequest request) {
+        String address = baseurl+"/api/projects";
         HttpURLConnection con = null;
         StringBuilder sb = new StringBuilder();
         Gson gson = new Gson();
 
         try {
             con = (HttpURLConnection) new URL(address).openConnection();
+            String token = "";
+            for (Cookie cookie: request.getCookies()) {
+                if (cookie.getName().equals("auth"))
+                    token = cookie.getValue();
+            }
+
+            con.setRequestProperty("Cookie", "auth="+token);
             con.setRequestMethod("GET");
+
             con.connect();
             if (HttpURLConnection.HTTP_OK == con.getResponseCode()) {
                 BufferedReader br = new BufferedReader(new InputStreamReader(con.getInputStream()));
@@ -75,7 +85,7 @@ public class ProjectController {
     }
 
     public User[] getApiUser() {
-        String address = "http://localhost:25595/api/user/";
+        String address = baseurl + "/api/users";
         HttpURLConnection con = null;
         StringBuilder sb = new StringBuilder();
         Gson gson = new Gson();
