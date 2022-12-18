@@ -26,10 +26,6 @@ public class ProjectController {
     String baseurl;
     @GetMapping("/projects")
     public String projects(ModelMap modelMap, HttpServletRequest request) {
-        String address = baseurl+"/api/projects";
-        HttpURLConnection con = null;
-        StringBuilder sb = new StringBuilder();
-    public String projects(ModelMap modelMap) {
         String address = baseurl+"/project/";
         StringBuilder sb = sendRequest(address);
         Gson gson = new Gson();
