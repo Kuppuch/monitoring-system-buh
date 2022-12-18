@@ -24,6 +24,11 @@ public class GreetingController {
     @Value("${baseurl}")
     String baseurl;
 
+    @GetMapping("/")
+    public String indexPage() {
+        return "index";
+    }
+
     @GetMapping("/login")
     public String loginPage() {
         return "login";
