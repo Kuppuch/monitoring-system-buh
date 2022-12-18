@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -23,6 +25,10 @@ public class ProjectController {
     @Value("${baseurl}")
     String baseurl;
     @GetMapping("/projects")
+    public String projects(ModelMap modelMap, HttpServletRequest request) {
+        String address = baseurl+"/api/projects";
+        HttpURLConnection con = null;
+        StringBuilder sb = new StringBuilder();
     public String projects(ModelMap modelMap) {
         String address = baseurl+"/project/";
         StringBuilder sb = sendRequest(address);
