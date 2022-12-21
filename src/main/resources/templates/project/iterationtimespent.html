@@ -11,15 +11,20 @@
     <tr>
         <td>Название задачи</td>
         <td>Роль разработчика</td>
-        <td>Разработчика</td>
+        <td th:if="${collapse == false}">Разработчик</td>
         <td>Трудозатраты</td>
     </tr>
     <tr th:each="timespents: ${timespents}">
         <td th:text="${timespents.issueName}"></td>
         <td th:text="${timespents.role}"></td>
-        <td th:text="${timespents.developer}"></td>
+        <td th:if="${collapse == false}" th:text="${timespents.developer}"></td>
         <td th:text="${timespents.spent}"></td>
     </tr>
 </table>
+
+<div th:switch="${collapse}">
+    <a th:case="true" th:href="@{/timespents(id=${param.id})}">Подробно</a>
+    <a th:case="false" th:href="@{/timespents(id=${param.id}, collapse=true)}">Кратко</a>
+</div>
 </body>
 </html>

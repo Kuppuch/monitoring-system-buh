@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.Arrays;
 import java.util.Objects;
 
 @Controller
@@ -83,13 +84,22 @@ public class ProjectController {
     }
 
     @GetMapping("/timespents")
-    public String getIterationTimespent(@RequestParam String id, ModelMap modelMap, HttpServletRequest request) {
+    public String getIterationTimespent(@RequestParam String id, @RequestParam(required = false) boolean collapse,
+                                        ModelMap modelMap, HttpServletRequest request) {
         String address = "http://127.0.0.1:25595/budgets/" + id + "/timespent";
         ApiResponse apiResponse = new ApiResponse();
         apiResponse = apiResponse.sendRequest(address, request);
         Gson gson = new Gson();
         TimespentReport[] timespentReports = gson.fromJson(apiResponse.getSb().toString(), TimespentReport[].class);
-        modelMap.addAttribute("timespents", timespentReports);
+        if (collapse) {
+            Timespent ts = new Timespent();
+            TimespentReport[] timespentReportsCollapse = ts.collapse(timespentReports);
+            modelMap.addAttribute("timespents", timespentReportsCollapse);
+            modelMap.addAttribute("collapse", true);
+        } else {
+            modelMap.addAttribute("timespents", timespentReports);
+            modelMap.addAttribute("collapse", false);
+        }
 
         return "project/iterationtimespent";
     }

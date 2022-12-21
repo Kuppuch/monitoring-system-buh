@@ -1,6 +1,6 @@
 package com.kuppuch.model;
 
-import java.util.Date;
+import java.util.*;
 
 public class Timespent {
     private int id;
@@ -65,5 +65,31 @@ public class Timespent {
 
     public void setSpent(double spent) {
         this.spent = spent;
+    }
+
+    public TimespentReport[] collapse(TimespentReport[] reports) {
+        Map<String, TimespentReport> trCollapse = new HashMap<String, TimespentReport>();
+        for (TimespentReport tr : reports) {
+            if (trCollapse.size() == 0) {
+                trCollapse.put(tr.getIssueName() + tr.getRole(), tr);
+                continue;
+            }
+            TimespentReport ntr = trCollapse.get(tr.getIssueName() + tr.getRole());
+            if (ntr != null) {
+                ntr.setSpent(ntr.getSpent() + tr.getSpent());
+                trCollapse.replace(tr.getIssueName() + tr.getRole(), ntr);
+            } else {
+                trCollapse.put(tr.getIssueName() + tr.getRole(), tr);
+            }
+
+        }
+
+        TimespentReport[] returnTR = new TimespentReport[trCollapse.size()];
+        int i = 0;
+        for (Map.Entry<String, TimespentReport> tr : trCollapse.entrySet()) {
+            returnTR[i] = tr.getValue();
+            i++;
+        }
+        return returnTR;
     }
 }
