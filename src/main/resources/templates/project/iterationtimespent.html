@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Трудозатраты</title>
+</head>
+<body>
+<div th:replace="header :: header"/>
+
+<table cellspacing="2" border="1" cellpadding="5" width="600">
+    <tr>
+        <td>Название задачи</td>
+        <td>Роль разработчика</td>
+        <td>Разработчика</td>
+        <td>Трудозатраты</td>
+    </tr>
+    <tr th:each="timespents: ${timespents}">
+        <td th:text="${timespents.issueName}"></td>
+        <td th:text="${timespents.role}"></td>
+        <td th:text="${timespents.developer}"></td>
+        <td th:text="${timespents.spent}"></td>
+    </tr>
+</table>
+</body>
+</html>

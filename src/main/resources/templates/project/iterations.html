@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Итерации</title>
+</head>
+<body>
+<table cellspacing="2" border="1" cellpadding="5" width="600">
+    <tr>
+        <td>Название итерации</td>
+        <td>Внешний идентификатор</td>
+        <td>Дата начала итерации</td>
+        <td>Дата окончания итерации</td>
+    </tr>
+    <tr th:each="iteration: ${iterations}">
+        <td><a th:href="@{/timespents(id=${iteration.id})}"th:text="${iteration.name}"></a></td>
+        <td th:text="${iteration.extId}"></td>
+        <td th:text="${iteration.startAt}"></td>
+        <td th:text="${iteration.endAt}"></td>
+    </tr>
+</table>
+</body>
+</html>

@@ -10,5 +10,12 @@
 <ul th:each="project:${projects}">
     <li th:text="${project.name} + ' ' + ${project.issuesCnt}"></li>
 </ul>
+
+<table cellspacing="2" border="1" cellpadding="5" width="600">
+    <tr th:each="project: ${projects}">
+        <td><a href=th:text="${project.id}"th:text="${project.name}"></a></td>
+        <td><a th:href="@{/projects(id=${project.id})}"th:text="${project.name}"></a></td>
+    </tr>
+</table>
 </body>
 </html>
