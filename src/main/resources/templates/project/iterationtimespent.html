@@ -26,5 +26,7 @@
     <a th:case="true" th:href="@{/timespents(id=${param.id})}">Подробно</a>
     <a th:case="false" th:href="@{/timespents(id=${param.id}, collapse=true)}">Кратко</a>
 </div>
+<a th:href="@{/content/{id}(id=${reportFile})}" th:text="Файл" target="blank"></a>
+
 </body>
 </html>
