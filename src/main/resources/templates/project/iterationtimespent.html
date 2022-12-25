@@ -3,6 +3,108 @@
 <head>
     <meta charset="UTF-8">
     <title>Трудозатраты</title>
+    <style>
+        .popup_bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.5);
+            opacity: 0;
+            pointer-events: none;
+            transition: 0.5s all;
+        }
+
+        .popup_bg.active {
+            opacity: 1;
+            pointer-events: all;
+            transition: 0.5s all;
+        }
+
+        .popup {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            background: #fff;
+            width: 400px;
+            padding: 25px;
+            transition: 0.5s all;
+        }
+
+        .popup.active {
+            transform: translate(-50%, -50%) scale(1);
+            transition: 0.5s all;
+        }
+
+        /* Конец важной части */
+        /* Далее код для стилизации формы */
+        .close-popup {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            cursor: pointer;
+        }
+
+        .popup label {
+            width: 100%;
+            margin-bottom: 25px;
+            display: flex;
+            flex-direction: column-reverse;
+        }
+
+        .popup .label_text {
+            font-size: 14px;
+            text-transform: uppercase;
+            font-weight: 500;
+            color: black;
+            margin-bottom: 5px;
+        }
+
+        .popup input {
+            height: 45px;
+            font-size: 18px;
+            border: none;
+            outline: none;
+            border-bottom: 1px solid black;
+        }
+
+
+        .popup textarea {
+            resize: none;
+            width: 100%;
+            height: 150px;
+            border: none;
+            outline: none;
+            border-bottom: 1px solid #cfd0d3;
+            font-size: 18px;
+            padding-top: 5px;
+        }
+
+
+        .popup button {
+            width: 100%;
+            height: 45px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: 18px;
+            border: 2px solid black;
+            background: black;
+            cursor: pointer;
+            text-transform: uppercase;
+            transition: 0.5s all;
+        }
+
+        .popup button:hover {
+            background: #fff;
+            color: black;
+            transition: 0.5s all;
+        }
+    </style>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
 <div th:replace="header :: header"/>
@@ -29,6 +131,69 @@
     <a th:case="false" th:href="@{/timespents(id=${param.id}, collapse=true)}">Кратко</a>
 </div>
 <a th:href="@{/content/{id}(id=${reportFile})}" th:text="Файл" target="blank"></a>
+<br>
+<a href="#" class="open-popup">Выставить счёт</a>
+
+
+<div class="popup_bg">
+    <form class="popup">
+        <img src="/content/close.svg" class="close-popup">
+        При выставлении счёта текущая итераци будет переведена в статус "Закрыто". В неё станет невозможным добавление
+        задач. Вы уверены, что хотите выставить счёт?
+        <br>
+        <form method="post">
+            <input type="text" name="id" th:value="${param.id}" style="color: white">
+            <button type="submit">Подтверждаю свою уверенность</button>
+        </form>
+    </form>
+</div>
+
+
+<script>
+    let popupBg = document.querySelector('.popup_bg');
+    let popup = document.querySelector('.popup');
+    let openPopupButtons = document.querySelectorAll('.open-popup');
+    let closePopupButton = document.querySelector('.close-popup');
+    //let submit = document.querySelector('.submit');
+
+    openPopupButtons.forEach((button) => { // Перебираем все кнопки
+        button.addEventListener('click', (e) => { // Для каждой вешаем обработчик событий на клик
+            e.preventDefault(); // Предотвращаем дефолтное поведение браузера
+            popupBg.classList.add('active'); // Добавляем класс 'active' для фона
+            popup.classList.add('active'); // И для самого окна
+        })
+    });
+
+    closePopupButton.addEventListener('click', () => { // Вешаем обработчик на крестик
+        popupBg.classList.remove('active'); // Убираем активный класс с фона
+        popup.classList.remove('active'); // И с окна
+    });
+
+    document.addEventListener('click', (e) => { // Вешаем обработчик на весь документ
+        if (e.target === popupBg) { // Если цель клика - фот, то:
+            popupBg.classList.remove('active'); // Убираем активный класс с фона
+            popup.classList.remove('active'); // И с окна
+        }
+    });
+
+    // submit.addEventListener('click', (event) => {
+    //     var urlParams = new URLSearchParams(window.location.search);
+    //     console.log(location.href)
+    //     fetch(location.href, {
+    //         method: 'POST',
+    //         headers: {
+    //             'Accept': 'application/json',
+    //             'Content-Type': 'application/json'
+    //         },
+    //         body: JSON.stringify({"id": urlParams.get("id")})
+    //     })
+    //         .then(response => response.json())
+    //         .then(response => console.log(JSON.stringify(response)))
+    //     popupBg.classList.remove('active');
+    //     popup.classList.remove('active');
+    // })
+
+</script>
 
 </body>
 </html>
