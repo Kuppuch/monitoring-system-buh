@@ -5,6 +5,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Objects;
@@ -29,7 +30,7 @@ public class ApiResponse {
         ResponseAddress = responseAddress;
     }
 
-    public ApiResponse sendRequest(String address, HttpServletRequest request) {
+    public ApiResponse sendRequest(MethodAPI method, String body, String address, HttpServletRequest request) {
         HttpURLConnection con = null;
         StringBuilder sb = new StringBuilder();
 
@@ -45,7 +46,16 @@ public class ApiResponse {
         try {
             con = (HttpURLConnection) new URL(address).openConnection();
             con.setRequestProperty("Cookie", "auth=" + token + ";");
-            con.setRequestMethod("GET");
+            con.setRequestMethod(String.valueOf(method));
+
+            if (Objects.equals(method.toString(), "POST")) {
+                con.setDoOutput(true);
+                try(OutputStream os = con.getOutputStream()) {
+                    byte[] input = body.getBytes("utf-8");
+                    os.write(input, 0, input.length);
+                }
+            }
+
             con.connect();
 
             if (HttpURLConnection.HTTP_OK == con.getResponseCode()) {

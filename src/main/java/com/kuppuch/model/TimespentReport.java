@@ -2,7 +2,7 @@ package com.kuppuch.model;
 
 import com.google.gson.annotations.SerializedName;
 
-public class TimespentReport {
+public class TimespentReport implements Cloneable {
 
     @SerializedName("ID")
     private int id;
@@ -14,6 +14,11 @@ public class TimespentReport {
     private String developer;
     @SerializedName("role")
     private String role;
+
+    @SerializedName("role_id")
+    private int roleID;
+
+    private double coast;
 
     public int getId() {
         return id;
@@ -53,5 +58,31 @@ public class TimespentReport {
 
     public void setRole(String role) {
         this.role = role;
+    }
+
+    public int getRoleID() {
+        return roleID;
+    }
+
+    public void setRoleID(int roleID) {
+        this.roleID = roleID;
+    }
+
+    public double getCoast() {
+        return coast;
+    }
+
+    public void setCoast(double coast) {
+        this.coast = coast;
+    }
+
+    @Override
+    public TimespentReport clone() {
+        try {
+            TimespentReport clone = (TimespentReport) super.clone();
+            return clone;
+        } catch (CloneNotSupportedException e) {
+            throw new AssertionError();
+        }
     }
 }

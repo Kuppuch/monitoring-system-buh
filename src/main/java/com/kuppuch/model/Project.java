@@ -15,14 +15,20 @@ public class Project {
     private int issuesCnt;
     private int manager;
 
+    @SerializedName(value = "budget")
+    private String iteration;
+    @SerializedName(value = "ext_id")
+    private int external;
+
     public Project() {}
 
-    public Project(String name, String description, int manager, int status, boolean isPublic) {
+    public Project(String name, String description, int manager, int status, String iteration, int external) {
         this.name = name;
         this.description = description;
         this.manager = manager;
         this.status = status;
-        this.isPublic = isPublic;
+        this.iteration = iteration;
+        this.external = external;
     }
 
     public int getId() {
@@ -79,5 +85,21 @@ public class Project {
 
     public void setManager(int manager) {
         this.manager = manager;
+    }
+
+    public String getIteration() {
+        return iteration;
+    }
+
+    public void setIteration(String iteration) {
+        this.iteration = iteration;
+    }
+
+    public int getExternal() {
+        return external;
+    }
+
+    public void setExternal(int external) {
+        this.external = external;
     }
 }

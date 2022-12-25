@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Оплатить</title>
+</head>
+<body>
+<form method="post">
+    <input type="text" name="name" placeholder="Введите почту">
+    <input type="text" name="description" placeholder="Введите описание проекта">
+    <select class="form-control" id="dropDownList" name="manager">
+        <option value="0">Выберите менеджера</option>
+        <option th:each="user : ${users}" th:value="${user.getId()}"
+                th:text="${user.getName()} + ' ' + ${user.getLastname()}"></option>
+    </select>
+    <input type="checkbox" name="pub">Публичный</input>
+    <input type="text" name="iteration" placeholder="Введите название бюджета">
+    <input type="text" name="external" placeholder="Введите внешний id бюджета">
+    <button type="submit">Добавить</button>
+</form>
+</body>
+</html>

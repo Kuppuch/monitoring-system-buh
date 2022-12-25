@@ -1,32 +1,24 @@
 package com.kuppuch.model;
 
-
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 @Entity
-public class Work {
-
+public class Payment {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
+    private int id;
     private String name;
-    private double coast;
+    private String status;
+    private int planId;
 
-    public Work() {}
-
-    public Work(String name, double coast) {
-        this.name = name;
-        this.coast = coast;
-    }
-
-    public long getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -38,12 +30,19 @@ public class Work {
         this.name = name;
     }
 
-    public double getCoast() {
-        return coast;
+    public String getStatus() {
+        return status;
     }
 
-    public void setCoast(double coast) {
-        this.coast = coast;
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public int getPlanId() {
+        return planId;
+    }
+
+    public void setPlanId(int planId) {
+        this.planId = planId;
     }
 }
-

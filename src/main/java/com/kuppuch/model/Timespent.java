@@ -71,7 +71,8 @@ public class Timespent {
         Map<String, TimespentReport> trCollapse = new HashMap<String, TimespentReport>();
         for (TimespentReport tr : reports) {
             if (trCollapse.size() == 0) {
-                trCollapse.put(tr.getIssueName() + tr.getRole(), tr);
+                TimespentReport ntr = tr.clone();
+                trCollapse.put(ntr.getIssueName() + ntr.getRole(), ntr);
                 continue;
             }
             TimespentReport ntr = trCollapse.get(tr.getIssueName() + tr.getRole());

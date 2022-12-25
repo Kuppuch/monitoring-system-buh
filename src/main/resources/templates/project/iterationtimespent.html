@@ -13,12 +13,14 @@
         <td>Роль разработчика</td>
         <td th:if="${collapse == false}">Разработчик</td>
         <td>Трудозатраты</td>
+        <td th:if="${collapse == true}">Стоимость</td>
     </tr>
     <tr th:each="timespents: ${timespents}">
         <td th:text="${timespents.issueName}"></td>
         <td th:text="${timespents.role}"></td>
         <td th:if="${collapse == false}" th:text="${timespents.developer}"></td>
         <td th:text="${timespents.spent}"></td>
+        <td th:if="${collapse == true}" th:text="${timespents.coast}"></td>
     </tr>
 </table>
 

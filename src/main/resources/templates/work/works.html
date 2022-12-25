@@ -10,8 +10,8 @@
 <table>
     <thead>
     <tr>
-        <th> Title</th>
-        <th> Author</th>
+        <th>Работа</th>
+        <th>Стоимость</th>
     </tr>
     </thead>
     <tbody>
@@ -19,9 +19,9 @@
         <td colspan="2"> No Books Available</td>
     </tr>
     <tr th:each="work : ${works}">
-        <td><span th:text="${work.id}"> Title </span></td>
-        <td><span th:text="${work.name}"> Title </span></td>
-        <td><span th:text="${work.coast}"> Author </span></td>
+<!--        <td><span th:text="${work.id}"> Title </span></td>-->
+        <td><span th:text="${work.name}">Work</span></td>
+        <td><span th:text="${work.coast}">Coast</span></td>
     </tr>
     </tbody>
 </table>
