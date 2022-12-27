@@ -22,7 +22,7 @@ public class RequestController {
     @GetMapping("/requests")
     public String requests(ModelMap modelMap) {
         Iterable<Request> requests = requestRepository.findAll();
-        modelMap.addAttribute("works", requests);
+        modelMap.addAttribute("requests", requests);
         return "request/requests";
     }
 
