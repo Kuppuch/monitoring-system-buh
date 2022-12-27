@@ -3,11 +3,34 @@
 <head>
     <meta charset="UTF-8">
     <title>Заявки</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
 </head>
 <body>
 <div th:replace="header :: header"/>
-<ul th:each="request:${requests}">
-  <li th:text="${request.name} + ' ' + ${request.description}"></li>
-</ul>
+<div class="container">
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Название проекта</th>
+            <th>Описание</th>
+            <th>Клиент</th>
+            <th>Телефон для связи</th>
+            <th>Email для связи</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="request:${requests}">
+            <td th:text="${request.id}"></td>
+            <td th:text="${request.name}"></td>
+            <td th:text="${request.description}"></td>
+            <td th:text="${request.user}"></td>
+            <td th:text="${request.phone}"></td>
+            <td th:text="${request.email}"></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
 </body>
 </html>

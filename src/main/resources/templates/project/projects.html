@@ -3,15 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <title>Проекты</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
 </head>
 <body>
 <div th:replace="header :: header"/>
-<a href="/projects/add">Создать проект</a>
 
-<table cellspacing="2" border="1" cellpadding="5" width="600">
-    <tr th:each="project: ${projects}">
-        <td><a th:href="@{/projects(id=${project.id})}"th:text="${project.name}"></a></td>
-    </tr>
-</table>
+<div class="container">
+    <a href="/projects/add" class="btn btn-primary">Создать проект</a>
+    <br>
+    <table class="table table-striped">
+        <tr th:each="project: ${projects}">
+            <td><a th:href="@{/projects(id=${project.id})}" th:text="${project.name}"></a></td>
+        </tr>
+    </table>
+</div>
 </body>
 </html>

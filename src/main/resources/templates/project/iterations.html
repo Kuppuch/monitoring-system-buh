@@ -3,22 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <title>Итерации</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
 </head>
 <body>
 <div th:replace="header :: header"/>
-<table cellspacing="2" border="1" cellpadding="5" width="600">
-    <tr>
-        <td>Название итерации</td>
-        <td>Внешний идентификатор</td>
-        <td>Дата начала итерации</td>
-        <td>Дата окончания итерации</td>
-    </tr>
-    <tr th:each="iteration: ${iterations}">
-        <td><a th:href="@{/timespents(id=${iteration.id})}"th:text="${iteration.name}"></a></td>
-        <td th:text="${iteration.extId}"></td>
-        <td th:text="${iteration.startAt}"></td>
-        <td th:text="${iteration.endAt}"></td>
-    </tr>
-</table>
+<div class="container">
+    <table class="table table-striped">
+        <tr>
+            <td>Название итерации</td>
+            <td>Внешний идентификатор</td>
+            <td>Дата начала итерации</td>
+            <td>Дата окончания итерации</td>
+        </tr>
+        <tr th:each="iteration: ${iterations}">
+            <td><a th:href="@{/timespents(id=${iteration.id})}" th:text="${iteration.name}"></a></td>
+            <td th:text="${iteration.extId}"></td>
+            <td th:text="${iteration.startAt}"></td>
+            <td th:text="${iteration.endAt}"></td>
+        </tr>
+    </table>
+</div>
 </body>
 </html>

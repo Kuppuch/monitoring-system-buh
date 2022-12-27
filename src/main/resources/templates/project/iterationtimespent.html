@@ -3,6 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <title>Трудозатраты</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
     <style>
         .popup_bg {
             position: fixed;
@@ -109,43 +111,50 @@
 <body>
 <div th:replace="header :: header"/>
 
-<table cellspacing="2" border="1" cellpadding="5" width="600">
-    <tr>
-        <td>Название задачи</td>
-        <td>Роль разработчика</td>
-        <td th:if="${collapse == false}">Разработчик</td>
-        <td>Трудозатраты</td>
-        <td th:if="${collapse == true}">Стоимость</td>
-    </tr>
-    <tr th:each="timespents: ${timespents}">
-        <td th:text="${timespents.issueName}"></td>
-        <td th:text="${timespents.role}"></td>
-        <td th:if="${collapse == false}" th:text="${timespents.developer}"></td>
-        <td th:text="${timespents.spent}"></td>
-        <td th:if="${collapse == true}" th:text="${timespents.coast}"></td>
-    </tr>
-</table>
+<div class="container">
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>Название задачи</th>
+            <th>Роль разработчика</th>
+            <th th:if="${collapse == false}">Разработчик</th>
+            <th>Трудозатраты</th>
+            <th th:if="${collapse == true}">Стоимость</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="timespents: ${timespents}">
+            <td th:text="${timespents.issueName}"></td>
+            <td th:text="${timespents.role}"></td>
+            <td th:if="${collapse == false}" th:text="${timespents.developer}"></td>
+            <td th:text="${timespents.spent}"></td>
+            <td th:if="${collapse == true}" th:text="${timespents.coast}"></td>
+        </tr>
+        </tbody>
+    </table>
 
-<div th:switch="${collapse}">
-    <a th:case="true" th:href="@{/timespents(id=${param.id})}">Подробно</a>
-    <a th:case="false" th:href="@{/timespents(id=${param.id}, collapse=true)}">Кратко</a>
-</div>
-<a th:href="@{/content/{id}(id=${reportFile})}" th:text="Файл" target="blank"></a>
-<br>
-<a href="#" class="open-popup">Выставить счёт</a>
+    <div th:switch="${collapse}">
+        <a th:case="true" th:href="@{/timespents(id=${param.id})}">Подробно</a>
+        <a th:case="false" th:href="@{/timespents(id=${param.id}, collapse=true)}">Кратко</a>
+    </div>
+    <a th:href="@{/content/{id}(id=${reportFile})}" th:text="Файл" target="blank"></a>
+    <br>
+    <a href="#" class="open-popup">Выставить счёт</a>
 
 
-<div class="popup_bg">
-    <form class="popup">
-        <img src="/content/close.svg" class="close-popup">
-        При выставлении счёта текущая итераци будет переведена в статус "Закрыто". В неё станет невозможным добавление
-        задач. Вы уверены, что хотите выставить счёт?
-        <br>
-        <form method="post">
-            <input type="text" name="id" th:value="${param.id}" style="color: white">
-            <button type="submit">Подтверждаю свою уверенность</button>
+    <div class="popup_bg">
+        <form class="popup">
+            <img src="/content/close.svg" class="close-popup">
+            При выставлении счёта текущая итераци будет переведена в статус "Закрыто". В неё станет невозможным
+            добавление
+            задач. Вы уверены, что хотите выставить счёт?
+            <br>
+            <form method="post">
+                <input type="text" name="id" th:value="${param.id}" style="color: white">
+                <button type="submit">Подтверждаю свою уверенность</button>
+            </form>
         </form>
-    </form>
+    </div>
 </div>
 
 

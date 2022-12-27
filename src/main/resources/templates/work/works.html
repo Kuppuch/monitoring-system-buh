@@ -3,27 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <title>Список работ</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
 </head>
 <body>
 <div th:replace="header :: header"/>
-<a href="/works/add">Добавить работу</a>
-<table>
-    <thead>
-    <tr>
-        <th>Работа</th>
-        <th>Стоимость</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:if="${works.empty}">
-        <td colspan="2"> No Books Available</td>
-    </tr>
-    <tr th:each="work : ${works}">
-<!--        <td><span th:text="${work.id}"> Title </span></td>-->
-        <td><span th:text="${work.name}">Work</span></td>
-        <td><span th:text="${work.coast}">Coast</span></td>
-    </tr>
-    </tbody>
-</table>
+<div class="container">
+    <a href="/works/add" class="btn btn-primary">Добавить работу</a>
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>Работа</th>
+            <th>Стоимость</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:if="${works.empty}">
+            <td colspan="2"> No Books Available</td>
+        </tr>
+        <tr th:each="work : ${works}">
+            <!--        <td><span th:text="${work.id}"> Title </span></td>-->
+            <td><span th:text="${work.name}">Work</span></td>
+            <td><span th:text="${work.coast}">Coast</span></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
 </body>
 </html>

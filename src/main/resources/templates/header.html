@@ -5,11 +5,25 @@
     <title>Header</title>
 </head>
 <body>
-  <div th:fragment="header" class="text-center">
-      <a href="/">Домашная страница</a>
-      <a href="/requests">Заявки</a>
-      <a href="/works">Работы</a>
-      <a href="/projects">Проекты</a>
-  </div>
+<nav th:fragment="header" class="navbar navbar-expand-lg bg-body-tertiary">
+    <div class="container-fluid">
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="/">Домашная страница</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/requests">Заявки</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/works">Работы</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/projects">Проекты</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
 </body>
 </html>
