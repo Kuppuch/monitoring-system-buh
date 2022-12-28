@@ -133,13 +133,18 @@ public class ProjectController {
         ApiResponse apiResponse = new ApiResponse();
         apiResponse = apiResponse.sendRequest(MethodAPI.POST, "", address, request);
         Gson gson = new Gson();
-        Payment payment = new Payment();
-        payment.setStatus("Не оплачен");
-        payment.setFullCost(sum);
-        payment.setIterationId(id);
-        paymentRepository.save(payment);
+        ErrorResponse er = gson.fromJson(apiResponse.getSb().toString(), ErrorResponse.class);
+        if (er.getCode() != 200) {
+            modelMap.addAttribute("error", "Ошибка с сервера. Неверные параметры. Возможно данный бюджет уже закрыт, проверьте страницу счетов");
+        } else {
+            Payment payment = new Payment();
+            payment.setStatus("Не оплачен");
+            payment.setFullCost(sum);
+            payment.setIterationId(id);
+            paymentRepository.save(payment);
+        }
+
         modelMap = createTimespentContent(id, collapse, modelMap, request);
-        modelMap.addAttribute("reportFile", payment.getId());
 
         return "project/iterationtimespent";
     }

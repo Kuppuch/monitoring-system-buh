@@ -147,7 +147,7 @@
         <a th:if="${collapse == true}" href="#" class="open-popup">Выставить счёт</a>
     </div>
 
-<!--    <span id="sum" hidden="hidden" th:text="${sum}"></span>-->
+    <p th:text="${error}"></p>
 
 
     <div class="popup_bg">
@@ -194,7 +194,6 @@
     submit.addEventListener('click', (event) => {
         var urlParams = new URLSearchParams(window.location.search);
         console.log(location.href + "&sum="+sum.innerHTML);
-        debugger;
         fetch(location.href  + "&sum="+sum.innerHTML, {
             method: 'POST',
             headers: {

@@ -1,14 +1,44 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Подтвердите код</title>
 </head>
 <body>
-<form method="post">
-    <input type="text" name="email" placeholder="Введите почту">
-    <input type="text" name="code" placeholder="Введите код подтверждения">
-    <button type="submit">Оплатить</button>
-</form>
+<div>
+    <p>Email: <span id="email" th:text="${email}"></span></p>
+    <p>Сумма оплаты: <span id="sum" th:text="${coast}"></span></p>
+    <input type="text" id="code" name="code" placeholder="Введите код подтверждения">
+    <button id="submit">Оплатить</button>
+</div>
+
+<script>
+    let submit = document.querySelector('#submit');
+    let sum = document.querySelector('#sum')
+    let email = document.querySelector('#email')
+    let code = document.querySelector('#code')
+    console.log(code.value + "111");
+
+    submit.addEventListener('click', (event) => {
+        var urlParams = new URLSearchParams(window.location.search);
+        console.log(location.href + "&email="+email.innerHTML);
+        console.log(parseFloat(sum.innerHTML));
+        console.log(sum.innerHTML);
+
+        fetch("/paycode?id=" + urlParams.get('id') + "&email="+email.innerHTML + "&coast="+parseFloat(sum.innerHTML) + "&code="+code.value, {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({"id": urlParams.get("id")})
+        })
+            .then(response => response.json())
+            .then(response => console.log(JSON.stringify(response)))
+        popupBg.classList.remove('active');
+        popup.classList.remove('active');
+    })
+
+</script>
 </body>
 </html>
