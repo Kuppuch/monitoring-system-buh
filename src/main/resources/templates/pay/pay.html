@@ -1,14 +1,34 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Оплатить</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
 </head>
 <body>
-<form method="post">
-    <input type="text" name="email" placeholder="Введите почту">
-    <input type="text" name="cost" placeholder="Введите сумму для оплаты">
-    <button type="submit">Оплатить</button>
-</form>
+<div th:replace="header :: header"/>
+<div class="container">
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <td>Id</td>
+            <td>Статус</td>
+            <td>Полная стоимость</td>
+            <td>Внесённая сумма</td>
+            <td>Итерация</td>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="payment: ${payments}">
+            <td><a th:href="@{/payone(id=${payment.id})}" th:text="${payment.id}"></a></td>
+            <td th:text="${payment.status}"></td>
+            <td th:text="${payment.fullCost}"></td>
+            <td th:text="${payment.paid}"></td>
+            <td th:text="${payment.iterationId}"></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
 </body>
 </html>

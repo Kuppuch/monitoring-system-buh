@@ -5,8 +5,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import com.kuppuch.interseptor.RequestInterceptor;
 import com.kuppuch.model.*;
+import com.kuppuch.repository.PaymentRepository;
 import com.kuppuch.repository.RWRepository;
 import com.kuppuch.repository.WorkRepository;
+import com.kuppuch.service.TimespentReportService;
 import com.lowagie.text.pdf.BaseFont;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -51,6 +53,9 @@ public class ProjectController {
 
     @Autowired
     public WorkRepository workRepository;
+
+    @Autowired
+    private PaymentRepository paymentRepository;
 
     public static Logger log = LoggerFactory.getLogger(RequestInterceptor.class);
 
@@ -114,8 +119,32 @@ public class ProjectController {
     }
 
     @GetMapping("/timespents")
-    public String getIterationTimespent(@RequestParam String id, @RequestParam(required = false) boolean collapse,
+    public String getIterationTimespent(@RequestParam int id, @RequestParam(required = false) boolean collapse,
                                         ModelMap modelMap, HttpServletRequest request) {
+        modelMap = createTimespentContent(id, collapse, modelMap, request);
+        return "project/iterationtimespent";
+    }
+
+    @PostMapping("/timespents")
+    public String submitPostPayment(@RequestParam int id, @RequestParam double sum,
+                                    @RequestParam(required = false) boolean collapse, ModelMap modelMap,
+                                    HttpServletRequest request) {
+        String address = "http://127.0.0.1:25595/api/budgets/?id=" + id + "&status=Close";
+        ApiResponse apiResponse = new ApiResponse();
+        apiResponse = apiResponse.sendRequest(MethodAPI.POST, "", address, request);
+        Gson gson = new Gson();
+        Payment payment = new Payment();
+        payment.setStatus("Не оплачен");
+        payment.setFullCost(sum);
+        payment.setIterationId(id);
+        paymentRepository.save(payment);
+        modelMap = createTimespentContent(id, collapse, modelMap, request);
+        modelMap.addAttribute("reportFile", payment.getId());
+
+        return "project/iterationtimespent";
+    }
+
+    public ModelMap createTimespentContent(int id, boolean collapse, ModelMap modelMap, HttpServletRequest request) {
         String address = "http://127.0.0.1:25595/budgets/" + id + "/timespent";
         ApiResponse apiResponse = new ApiResponse();
         apiResponse = apiResponse.sendRequest(MethodAPI.GET, "", address, request);
@@ -126,15 +155,18 @@ public class ProjectController {
         apiResponse = new ApiResponse();
         apiResponse = apiResponse.sendRequest(MethodAPI.GET, "", address, request);
 
+        TimespentReportService ts = new TimespentReportService();
         Iteration iteration = gson.fromJson(apiResponse.getSb().toString(), Iteration.class);
-        TimespentReport[] timespentReportsForFile = Arrays.copyOf(timespentReports, timespentReports.length);
+        TimespentReport[] timespentReportsForFile = ts.deepClone(timespentReports);
         String reportFile = getFile(timespentReportsForFile, iteration.getName());
 
         if (collapse) {
-            Timespent ts = new Timespent();
-            TimespentReport[] timespentReportsCollapse = ts.collapse(timespentReports);
+
+            TimespentReport[] timespentReportsCollapse = ts.collapse(Arrays.copyOf(timespentReports, timespentReports.length));
             timespentReportsCollapse = payment(timespentReportsCollapse);
+            double sum = ts.getSum(timespentReportsCollapse);
             modelMap.addAttribute("timespents", timespentReportsCollapse);
+            modelMap.addAttribute("sum", sum);
             modelMap.addAttribute("collapse", true);
         } else {
             modelMap.addAttribute("timespents", timespentReports);
@@ -144,14 +176,15 @@ public class ProjectController {
         modelMap.addAttribute("resourcePath", resourcePath);
         modelMap.addAttribute("reportFile", reportFile);
 
-        return "project/iterationtimespent";
+        return modelMap;
     }
 
     public String getFile(TimespentReport[] timespentReports, String iterationName) {
 
-        Timespent ts = new Timespent();
-        TimespentReport[] timespentReportsCollapse = ts.collapse(timespentReports.clone());
+        TimespentReportService ts = new TimespentReportService();
+        TimespentReport[] timespentReportsCollapse = ts.collapse(Arrays.copyOf(timespentReports, timespentReports.length));
         timespentReportsCollapse = payment(timespentReportsCollapse);
+        double sum = ts.getSum(timespentReportsCollapse);
 
         File inputHTML = new File("./src/main/resources/doc_sample/report.html");
         Long uidfile = 0L;
@@ -172,6 +205,8 @@ public class ProjectController {
                         "            <td>" + t.getCoast() + "</td>\n" +
                         "        </tr>");
             }
+
+            mainDiv.append("<p>Итого сумма к оплате: " + sum + "</p>");
 
             uidfile = Instant.now().getEpochSecond();
             OutputStream outputStream = new FileOutputStream(resourcePath + "/report" + uidfile + ".pdf");

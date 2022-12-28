@@ -133,27 +133,31 @@
         </tbody>
     </table>
 
-    <div th:switch="${collapse}">
-        <a th:case="true" th:href="@{/timespents(id=${param.id})}">Подробно</a>
-        <a th:case="false" th:href="@{/timespents(id=${param.id}, collapse=true)}">Кратко</a>
+    <div th:if="${collapse == true}">
+        <p>Итого сумма к оплате: <span id="sum" th:text="${sum}"></span></p>
     </div>
-    <a th:href="@{/content/{id}(id=${reportFile})}" th:text="Файл" target="blank"></a>
-    <br>
-    <a href="#" class="open-popup">Выставить счёт</a>
+
+    <div th:if="${not #lists.isEmpty(timespents)}">
+        <div th:switch="${collapse}">
+            <a th:case="true" th:href="@{/timespents(id=${param.id})}">Подробно</a>
+            <a th:case="false" th:href="@{/timespents(id=${param.id}, collapse=true)}">Кратко</a>
+        </div>
+        <a th:href="@{/content/{id}(id=${reportFile})}" th:text="Файл" target="blank"></a>
+        <br>
+        <a th:if="${collapse == true}" href="#" class="open-popup">Выставить счёт</a>
+    </div>
+
+<!--    <span id="sum" hidden="hidden" th:text="${sum}"></span>-->
 
 
     <div class="popup_bg">
-        <form class="popup">
+        <div class="popup">
             <img src="/content/close.svg" class="close-popup">
             При выставлении счёта текущая итераци будет переведена в статус "Закрыто". В неё станет невозможным
-            добавление
-            задач. Вы уверены, что хотите выставить счёт?
+            добавление задач. Вы уверены, что хотите выставить счёт?
             <br>
-            <form method="post">
-                <input type="text" name="id" th:value="${param.id}" style="color: white">
-                <button type="submit">Подтверждаю свою уверенность</button>
-            </form>
-        </form>
+            <button id="submit">Подтверждаю свою уверенность</button>
+        </div>
     </div>
 </div>
 
@@ -163,44 +167,47 @@
     let popup = document.querySelector('.popup');
     let openPopupButtons = document.querySelectorAll('.open-popup');
     let closePopupButton = document.querySelector('.close-popup');
-    //let submit = document.querySelector('.submit');
+    let submit = document.querySelector('#submit');
+    let sum = document.querySelector('#sum')
+    console.log(sum.innerHTML);
 
-    openPopupButtons.forEach((button) => { // Перебираем все кнопки
-        button.addEventListener('click', (e) => { // Для каждой вешаем обработчик событий на клик
-            e.preventDefault(); // Предотвращаем дефолтное поведение браузера
-            popupBg.classList.add('active'); // Добавляем класс 'active' для фона
-            popup.classList.add('active'); // И для самого окна
+    openPopupButtons.forEach((button) => {
+        button.addEventListener('click', (e) => {
+            e.preventDefault();
+            popupBg.classList.add('active');
+            popup.classList.add('active');
         })
     });
 
-    closePopupButton.addEventListener('click', () => { // Вешаем обработчик на крестик
-        popupBg.classList.remove('active'); // Убираем активный класс с фона
-        popup.classList.remove('active'); // И с окна
+    closePopupButton.addEventListener('click', () => {
+        popupBg.classList.remove('active');
+        popup.classList.remove('active');
     });
 
-    document.addEventListener('click', (e) => { // Вешаем обработчик на весь документ
-        if (e.target === popupBg) { // Если цель клика - фот, то:
-            popupBg.classList.remove('active'); // Убираем активный класс с фона
-            popup.classList.remove('active'); // И с окна
+    document.addEventListener('click', (e) => {
+        if (e.target === popupBg) {
+            popupBg.classList.remove('active');
+            popup.classList.remove('active');
         }
     });
 
-    // submit.addEventListener('click', (event) => {
-    //     var urlParams = new URLSearchParams(window.location.search);
-    //     console.log(location.href)
-    //     fetch(location.href, {
-    //         method: 'POST',
-    //         headers: {
-    //             'Accept': 'application/json',
-    //             'Content-Type': 'application/json'
-    //         },
-    //         body: JSON.stringify({"id": urlParams.get("id")})
-    //     })
-    //         .then(response => response.json())
-    //         .then(response => console.log(JSON.stringify(response)))
-    //     popupBg.classList.remove('active');
-    //     popup.classList.remove('active');
-    // })
+    submit.addEventListener('click', (event) => {
+        var urlParams = new URLSearchParams(window.location.search);
+        console.log(location.href + "&sum="+sum.innerHTML);
+        debugger;
+        fetch(location.href  + "&sum="+sum.innerHTML, {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({"id": urlParams.get("id")})
+        })
+            .then(response => response.json())
+            .then(response => console.log(JSON.stringify(response)))
+        popupBg.classList.remove('active');
+        popup.classList.remove('active');
+    })
 
 </script>
 

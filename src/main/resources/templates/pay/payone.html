@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Оплата</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+</head>
+<body>
+<div class="container m-3">
+    <form method="post">
+        <input type="text" name="email" placeholder="Введите почту">
+        <input type="text" name="cost" placeholder="Введите сумму для оплаты" th:value="${payment.fullCost}">
+        <button type="submit">Оплатить</button>
+    </form>
+</div>
+</body>
+</html>

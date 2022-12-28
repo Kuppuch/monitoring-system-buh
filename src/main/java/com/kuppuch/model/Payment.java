@@ -9,25 +9,21 @@ import javax.persistence.Id;
 public class Payment {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private int id;
-    private String name;
+    private long id;
     private String status;
-    private int planId;
 
-    public int getId() {
+    private int iterationId;
+
+    private double fullCost;
+
+    private double paid;
+
+    public long getId() {
         return id;
     }
 
     public void setId(int id) {
         this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public String getStatus() {
@@ -38,11 +34,27 @@ public class Payment {
         this.status = status;
     }
 
-    public int getPlanId() {
-        return planId;
+    public int getIterationId() {
+        return iterationId;
     }
 
-    public void setPlanId(int planId) {
-        this.planId = planId;
+    public void setIterationId(int iterationId) {
+        this.iterationId = iterationId;
+    }
+
+    public double getFullCost() {
+        return fullCost;
+    }
+
+    public void setFullCost(double fullCost) {
+        this.fullCost = fullCost;
+    }
+
+    public double getPaid() {
+        return paid;
+    }
+
+    public void setPaid(double paid) {
+        this.paid = paid;
     }
 }

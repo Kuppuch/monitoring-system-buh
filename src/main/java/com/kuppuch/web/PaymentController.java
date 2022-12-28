@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.view.RedirectView;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Optional;
 
 @Controller
 public class PaymentController {
@@ -29,23 +30,18 @@ public class PaymentController {
     }
 
     @GetMapping("/pay")
-    public String payPage(@RequestParam int id) {
-
+    public String paysPage(ModelMap modelMap) {
+        Iterable<Payment> payments = paymentRepository.findAll();
+        modelMap.addAttribute("payments", payments);
         return "pay/pay";
     }
 
-    @PostMapping("/timespents")
-    public RedirectView submitPostPayment(@RequestParam String id, /*@RequestParam(required = false) boolean collapse,*/
-                                    ModelMap modelMap, HttpServletRequest request) {
-        String address = "http://127.0.0.1:25595/api/budgets/?id=" + id + "&status=Close";
-        ApiResponse apiResponse = new ApiResponse();
-        apiResponse = apiResponse.sendRequest(MethodAPI.POST, "", address, request);
-        Gson gson = new Gson();
-        Payment payment = new Payment();
-        payment.setStatus("Не оплачен");
-        paymentRepository.save(payment);
-        modelMap.addAttribute("reportFile", payment.getId());
-        return new RedirectView("pay/pay");
+    @GetMapping("/payone")
+    public String payPage(@RequestParam(required = false) long id, ModelMap modelMap) {
+        Optional<Payment> paymentOptional = paymentRepository.findById(id);
+        Payment payment = paymentOptional.get();
+        modelMap.addAttribute("payment", payment);
+        return "pay/payone";
     }
 
     @PostMapping("/pay")
