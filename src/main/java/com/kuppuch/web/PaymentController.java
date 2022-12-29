@@ -90,6 +90,13 @@ public class PaymentController {
             payment.setFullCost(payment.getFullCost());
             paymentRepository.save(payment);
 
+            address = "http://127.0.0.1:25595/api/budgets/?id=" + payment.getIterationId() + "&status=Work";
+            apiResponse = apiResponse.sendRequest(MethodAPI.POST, "", address, request);
+            ErrorResponse er = gson.fromJson(apiResponse.getSb().toString(), ErrorResponse.class);
+            if (er.getCode() != 200) {
+                modelMap.addAttribute("error", "Ошибка");
+            }
+
             return "pay/pay_done";
         }
 
